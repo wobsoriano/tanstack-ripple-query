@@ -1,6 +1,6 @@
-# Ripple Basic Template
+# Ripple TanStack Query
 
-A minimal Ripple application template with TypeScript and Vite.
+A minimal example of using TanStack Query with Ripple
 
 ## Getting Started
 
