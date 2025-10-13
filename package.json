@@ -1,6 +1,6 @@
 {
 	"name": "tanstack-ripple-query",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"description": "Helpers for fetching, caching and updating asynchronous data in Ripple.",
 	"type": "module",
 	"repository": {
