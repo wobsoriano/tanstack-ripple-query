@@ -8,7 +8,7 @@ export component App() {
 	<QueryClientProvider {client}>
     const query = useQuery({
       queryKey: ['todos'],
-      queryFn: fetchTodos
+      queryFn: () => fetchTodos()
     })
 
     if (@query.fetchStatus === 'fetching') {

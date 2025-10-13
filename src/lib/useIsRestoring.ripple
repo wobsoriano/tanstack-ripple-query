@@ -1,0 +1,11 @@
+import { Context, track } from "ripple";
+import type { Tracked } from 'ripple'
+
+const RestoringContext = new Context<Tracked<boolean>>()
+
+export function useIsRestoring(): Tracked<boolean> {
+  const isRestoring = track(false)
+  // RestoringContext.set(isRestoring) TODO: Set in provider
+
+  return isRestoring
+}

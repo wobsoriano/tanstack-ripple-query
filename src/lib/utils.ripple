@@ -1,0 +1,26 @@
+import { effect, untrack } from "ripple";
+
+export function watch(deps: Array<any>, cb: () => void) {
+	let first = true;
+
+	effect(() => {
+		deps.forEach((dep) => @dep);
+
+		if (first) {
+			first = false;
+
+			return;
+		}
+
+		return untrack(cb);
+	});
+}
+
+export function updateState(
+  state: Record<string, any>,
+  update: Record<string, any>,
+): void {
+  Object.keys(state).forEach((key) => {
+    state[key] = update[key]
+  })
+}

@@ -1,0 +1,86 @@
+import type { Tracked } from 'ripple'
+import { effect, track, TrackedObject } from 'ripple'
+import type { CreateBaseQueryOptions, CreateBaseQueryResult } from './types'
+import { QueryClient, QueryObserver } from '@tanstack/query-core'
+import { useQueryClient } from './useQueryClient.ripple'
+import { watch, updateState } from './utils.ripple'
+import { useIsRestoring } from './useIsRestoring.ripple'
+
+export function createBaseQuery<
+  TQueryFnData,
+  TError,
+  TData,
+  TQueryData,
+  TQueryKey extends QueryKey,
+>(
+  options: Tracked<
+    CreateBaseQueryOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>
+  >,
+  Observer: typeof QueryObserver,
+  queryClient?: Tracked<QueryClient>,
+): CreateBaseQueryResult<TData, TError>{
+  const client = track(() => useQueryClient(queryClient?.()))
+  const isRestoring = useIsRestoring()
+
+  const resolvedOptions = track(() => {
+    const opts = @client.defaultQueryOptions(@options())
+    opts._optimisticResults = @isRestoring ? 'isRestoring' : 'optimistic'
+    return opts
+  })
+
+  let observer = track(
+    new Observer<TQueryFnData, TError, TData, TQueryData, TQueryKey>(
+      @client,
+      @resolvedOptions,
+    )
+  )
+
+  watch([client], () => {
+    @observer = new Observer<
+      TQueryFnData,
+      TError,
+      TData,
+      TQueryData,
+      TQueryKey
+    >(@client, @resolvedOptions)
+  })
+
+  function createResult() {
+    const result = @observer.getOptimisticResult(@resolvedOptions)
+    return !@resolvedOptions.notifyOnChangeProps
+      ? @observer.trackResult(result)
+      : result
+  }
+
+  const query = new TrackedObject(createResult())
+
+  effect(() => {
+    const unsubscribe = @isRestoring
+      ? () => undefined
+      : @observer.subscribe(() => updateState(query, createResult()))
+
+    @observer.updateResult()
+
+    return unsubscribe
+  })
+
+  watch([resolvedOptions], () => {
+    @observer.setOptions(@resolvedOptions)
+  })
+
+  watch([resolvedOptions, observer], () => {
+      // The only reason this is necessary is because of `isRestoring`.
+      // Because we don't subscribe while restoring, the following can occur:
+      // - `isRestoring` is true
+      // - `isRestoring` becomes false
+      // - `observer.subscribe` and `observer.updateResult` is called in the above effect,
+      //   but the subsequent `fetch` has already completed
+      // - `result` misses the intermediate restored-but-not-fetched state
+      //
+      // this could technically be its own effect but that doesn't seem necessary
+      updateState(query, createResult())
+    },
+  )
+
+  return query
+}
