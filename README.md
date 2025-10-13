@@ -1,5 +1,7 @@
 # tanstack-ripple-query
 
+Helpers for fetching, caching and updating asynchronous data in Ripple.
+
 ## Installation
 
 ```bash
