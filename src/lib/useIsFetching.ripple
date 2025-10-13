@@ -1,6 +1,7 @@
-import { effect, track, Tracked } from 'ripple';
+import { effect, track } from 'ripple';
 import type { QueryFilters } from '@tanstack/query-core';
 import { useQueryClient } from './useQueryClient.ripple';
+import type { Tracked } from 'ripple';
 
 export function useIsFetching(filters: Tracked<QueryFilters>, queryClient: Tracked<QueryClient>): Tracked<number> {
 	const client = track(() => useQueryClient(@queryClient?.()));

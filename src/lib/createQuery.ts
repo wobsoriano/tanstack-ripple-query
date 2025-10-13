@@ -1,7 +1,12 @@
 import { QueryObserver } from '@tanstack/query-core';
 import { createBaseQuery } from './createBaseQuery.ripple';
 import type { DefaultError, QueryClient, QueryKey } from '@tanstack/query-core';
-import type { CreateQueryOptions, CreateQueryResult, DefinedCreateQueryResult, MaybeTracked } from './types.js';
+import type {
+	CreateQueryOptions,
+	CreateQueryResult,
+	DefinedCreateQueryResult,
+	MaybeTracked,
+} from './types.js';
 import type { DefinedInitialDataOptions, UndefinedInitialDataOptions } from './queryOptions.js';
 
 export function createQuery<

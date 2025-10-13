@@ -53,4 +53,4 @@ export type DefinedCreateQueryResult<
 	TError = DefaultError,
 > = DefinedCreateBaseQueryResult<TData, TError>;
 
-export type MaybeTracked<T> = T | Tracked<T>
+export type MaybeTracked<T> = T | Tracked<T>;

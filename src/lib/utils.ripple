@@ -1,5 +1,4 @@
 import { effect, untrack } from 'ripple';
-import type { MaybeTracked } from './types.js'
 
 export function watch(deps: Array<any>, cb: () => void) {
 	let first = true;
@@ -21,8 +20,4 @@ export function updateState(state: Record<string, any>, update: Record<string, a
 	Object.keys(state).forEach((key) => {
 		state[key] = update[key];
 	});
-}
-
-export function toValue<T>(value: MaybeTracked<T>): T {
-	return @value
 }
