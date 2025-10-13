@@ -1,21 +1,23 @@
-import { QueryClientProvider, useQuery } from './QueryClientProvider.ripple'
+import { QueryClientProvider } from './lib/QueryClientProvider.ripple'
+import { createQuery } from './lib/createQuery'
 import { QueryClient } from '@tanstack/query-core'
 import { fetchTodos } from './todos'
+import { track } from 'ripple'
 
 const client = new QueryClient()
 
 export component App() {
 	<QueryClientProvider {client}>
-    const query = useQuery({
+    const query = createQuery({
       queryKey: ['todos'],
-      queryFn: fetchTodos
+      queryFn: () => fetchTodos()
     })
 
-    if (@query.fetchStatus === 'fetching') {
+    if (query.fetchStatus === 'fetching') {
       <div>{'Loading todos...'}</div>
     } else {
       <ul>
-        for (const item of @query.data) {
+        for (const item of query.data) {
           <li>{item.todo}</li>
         }
       </ul>

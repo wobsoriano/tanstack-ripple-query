@@ -1,0 +1,23 @@
+import { effect, track, Tracked } from "ripple";
+import type { QueryFilters } from '@tanstack/query-core'
+import { useQueryClient } from './useQueryClient.ripple'
+
+export function useIsFetching(
+  filters?: Tracked<QueryFilters>,
+  queryClient?: Tracked<QueryClient>,
+): Tracked<number> {
+  const client = track(() => useQueryClient(@queryClient?.()))
+  const queryCache = track(() => @client.getQueryCache())
+
+  let fetches = track(@client.isFetching(@filters?.()))
+
+  const unsubscribe = @queryCache.subscribe(() => {
+    fetches = @client.isFetching(@filters?.())
+  })
+
+  effect(() => {
+    return unsubscribe
+  })
+
+  return fetches
+}

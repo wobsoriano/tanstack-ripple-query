@@ -1,0 +1,17 @@
+import { QueryClientContext } from './QueryClientProvider.ripple'
+
+export function useQueryClient(queryClient?: QueryClient): QueryClient {
+  if (queryClient) {
+    return queryClient
+  }
+
+  const client = QueryClientContext.get()
+
+  if (!client) {
+    throw new Error(
+      'No QueryClient was found in Ripple context. Did you forget to wrap your component with QueryClientProvider?',
+    )
+  }
+
+  return client
+}
