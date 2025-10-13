@@ -1,6 +1,5 @@
 import { Context, effect } from 'ripple';
 import { QueryClient } from '@tanstack/query-core';
-import { QueryObserver } from '@tanstack/query-core';
 import type { QueryClientProviderProps } from './types.js';
 
 export const QueryClientContext = new Context<QueryClient>();
