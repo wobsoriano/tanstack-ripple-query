@@ -1,4 +1,4 @@
-import { effect, untrack } from "ripple";
+import { effect, untrack } from 'ripple';
 
 export function watch(deps: Array<any>, cb: () => void) {
 	let first = true;
@@ -16,11 +16,8 @@ export function watch(deps: Array<any>, cb: () => void) {
 	});
 }
 
-export function updateState(
-  state: Record<string, any>,
-  update: Record<string, any>,
-): void {
-  Object.keys(state).forEach((key) => {
-    state[key] = update[key]
-  })
+export function updateState(state: Record<string, any>, update: Record<string, any>): void {
+	Object.keys(state).forEach((key) => {
+		state[key] = update[key];
+	});
 }

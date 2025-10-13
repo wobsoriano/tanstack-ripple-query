@@ -1,22 +1,21 @@
-import { Context, effect } from 'ripple'
-import { QueryClient } from '@tanstack/query-core'
-import { QueryObserver } from '@tanstack/query-core'
-import type { QueryClientProviderProps } from './types.js'
+import { Context, effect } from 'ripple';
+import { QueryClient } from '@tanstack/query-core';
+import { QueryObserver } from '@tanstack/query-core';
+import type { QueryClientProviderProps } from './types.js';
 
-export const QueryClientContext = new Context<QueryClient>()
+export const QueryClientContext = new Context<QueryClient>();
 
 export component QueryClientProvider(props: QueryClientProviderProps) {
-  const client = props.client || new QueryClient()
-  QueryClientContext.set(props.client || new QueryClient())
+	const client = props.client || new QueryClient();
+	QueryClientContext.set(props.client || new QueryClient());
+	effect(() => {
+		client.mount();
 
-  effect(() => {
-    client.mount()
-    
-    return () => client.unmount()
-  })
+		return () => client.unmount();
+	});
 
-  // Getting this weird ts error
-  // Cannot find name 'Children'. Did you mean 'children'?
-  const { children } = props
-  <@children />
+	// Getting this weird ts error
+	// Cannot find name 'Children'. Did you mean 'children'?
+	const { children } = props;
+	<@children />
 }
