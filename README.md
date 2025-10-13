@@ -14,7 +14,7 @@ import {
   useQueryClient,
   QueryClient,
   QueryClientProvider,
-} from '@tanstack/react-query'
+} from 'tanstack-ripple-query'
 
 import { getTodos } from '../my-api'
 
