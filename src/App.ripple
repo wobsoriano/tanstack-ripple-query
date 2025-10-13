@@ -1,27 +1,54 @@
 import { QueryClientProvider } from './lib/QueryClientProvider.ripple';
 import { createQuery } from './lib/createQuery';
 import { QueryClient } from '@tanstack/query-core';
-import { fetchTodos } from './todos';
+import { fetchSingleTodo, fetchTodos } from './todos';
+import { effect, track } from 'ripple'
 
 const client = new QueryClient();
 
 export component App() {
 	<QueryClientProvider {client}>
-		const query = createQuery({
-			queryKey: ['todos'],
-			queryFn: () => fetchTodos(),
-		});
-
-		if (query.isLoading) {
-			<p>{'Loading...'}</p>
-		} else if (query.isError) {
-			<p>{`Error: ${query.error.message}`}</p>
-		} else if (query.isSuccess) {
-			<ul>
-				for (const item of query.data) {
-					<li>{item.todo}</li>
-				}
-			</ul>
-		}
+		<TodoList />
+		<Todo />
 	</QueryClientProvider>
+}
+
+component TodoList() {
+	const query = createQuery({
+		queryKey: ['todos'],
+		queryFn: () => fetchTodos(),
+	});
+
+	if (query.isLoading) {
+		<p>{'Loading...'}</p>
+	} else if (query.isError) {
+		<p>{`Error: ${query.error.message}`}</p>
+	} else if (query.isSuccess) {
+		<ul>
+			for (const item of query.data) {
+				<li>{item.todo}</li>
+			}
+		</ul>
+	}
+}
+
+component Todo() {
+	const todoId = track(1)
+
+	const query = createQuery(
+		track(() => ({
+			queryKey: ['todos', @todoId],
+			queryFn: () => fetchSingleTodo(@todoId),
+		}))
+	);
+
+	if (query.isLoading) {
+		<p>{'Loading todo...'}</p>
+	} else if (query.isError) {
+		<p>{`Error: ${query.error.message}`}</p>
+	} else {
+		<p>{`Todo: ${query.data.todo}`}</p>
+	}
+
+	<button onClick={() => @todoId++}>{'Next'}</button>
 }
