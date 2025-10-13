@@ -1,49 +1,49 @@
-# Ripple TanStack Query
+# tanstack-ripple-query
 
-A minimal example of using TanStack Query with Ripple
+## Installation
 
-## Getting Started
+```bash
+npm install tanstack-ripple-query
+```
 
-1. Install dependencies:
+## Usage
 
-    ```bash
-    npm install # or pnpm or yarn
-    ```
+```tsx
+import {
+  createQuery,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 
-2. Start the development server:
+import { getTodos } from '../my-api'
 
-    ```bash
-    npm run dev
-    ```
+// Create a client
+const queryClient = new QueryClient()
 
-3. Build for production:
-    ```bash
-    npm run build
-    ```
+component App() {
+    <QueryClientProvider client={queryClient}>
+      <Todos />
+    </QueryClientProvider>
+}
 
-## Code Formatting
+component Todos() {
+    // Access the client
+    const queryClient = useQueryClient()
 
-This template includes Prettier with the Ripple plugin for consistent code formatting.
+    // Queries
+    const query = useQuery({ queryKey: ['todos'], queryFn: getTodos })
 
-### Available Commands
+    <div>
+        <ul>
+            for (const todo of query.data) {
+                <li>{todo.title}</li>
+            }
+        </ul>
+    </div>
+}
+```
 
-- `npm run format` - Format all files
-- `npm run format:check` - Check if files are formatted correctly
+## License
 
-### Configuration
-
-Prettier is configured in `.prettierrc` with the following settings:
-
-- Uses tabs for indentation
-- Single quotes for strings
-- 100 character line width
-- Includes the `prettier-plugin-ripple` for `.ripple` file formatting
-
-### VS Code Integration
-
-For the best development experience, install the [Prettier VS Code extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) and the [Ripple VS Code extension](https://marketplace.visualstudio.com/items?itemName=ripplejs.ripple-vscode-plugin).
-
-## Learn More
-
-- [Ripple Documentation](https://github.com/trueadm/ripple)
-- [Vite Documentation](https://vitejs.dev/)
+MIT

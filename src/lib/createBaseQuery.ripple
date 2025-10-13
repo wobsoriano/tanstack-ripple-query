@@ -19,15 +19,17 @@ export function createBaseQuery<
   Observer: typeof QueryObserver,
   queryClient?: Tracked<QueryClient>,
 ): CreateBaseQueryResult<TData, TError>{
-  const client = track(() => useQueryClient(queryClient?.()))
+  /** Load query client */
+  const client = track(() => useQueryClient(@queryClient?.()))
   const isRestoring = useIsRestoring()
 
   const resolvedOptions = track(() => {
-    const opts = @client.defaultQueryOptions(@options())
+    const opts = @client.defaultQueryOptions(@options)
     opts._optimisticResults = @isRestoring ? 'isRestoring' : 'optimistic'
     return opts
   })
 
+  /** Creates the observer */
   let observer = track(
     new Observer<TQueryFnData, TError, TData, TQueryData, TQueryKey>(
       @client,
@@ -59,7 +61,7 @@ export function createBaseQuery<
       ? () => undefined
       : @observer.subscribe(() => updateState(query, createResult()))
 
-    @observer.updateResult()
+    // @observer.updateResult() TODO: Where is updateResult coming?
 
     return unsubscribe
   })

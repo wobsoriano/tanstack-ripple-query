@@ -1,8 +1,23 @@
 {
-	"name": "vite-template-ripple",
+	"name": "tanstack-ripple-query",
 	"version": "0.0.0",
-	"description": "",
+	"description": "Helpers for fetching, caching and updating asynchronous data in Ripple.",
 	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/wobsoriano/tanstack-ripple-query.git"
+	},
+	"bugs": "https://github.com/wobsoriano/tanstack-ripple-query/issues",
+	"exports": {
+		".": {
+			"types": "./src/types/index.d.ts",
+			"import": "./src/lib/index.ts",
+			"default": "./src/lib/index.ts"
+		}
+	},
+	"files": [
+		"src/lib"
+	],
 	"engines": {
 		"node": ">=20.0.0"
 	},
@@ -13,20 +28,25 @@
 		"lint": "eslint .",
 		"serve": "vite preview",
 		"format": "prettier --write .",
-		"format:check": "prettier --check ."
+		"format:check": "prettier --check .",
+		"release": "bumpp && npm publish"
 	},
 	"license": "MIT",
 	"devDependencies": {
-		"eslint": "^9.0.0",
-		"eslint-plugin-ripple": "^0.1.0",
+		"bumpp": "^10.3.1",
+		"eslint": "^9.37.0",
+		"eslint-plugin-ripple": "^0.2.124",
 		"prettier": "^3.6.2",
-		"prettier-plugin-ripple": "^0.2.29",
-		"typescript": "^5.9.2",
-		"vite": "^7.1.4",
-		"vite-plugin-ripple": "^0.2.29"
+		"prettier-plugin-ripple": "^0.2.124",
+		"typescript": "^5.9.3",
+		"vite": "^7.1.9",
+		"vite-plugin-ripple": "^0.2.124"
 	},
 	"dependencies": {
 		"@tanstack/query-core": "^5.90.2",
-		"ripple": "^0.2.29"
+		"ripple": "^0.2.124"
+	},
+	"peerDependencies": {
+		"ripple": "*"
 	}
 }
