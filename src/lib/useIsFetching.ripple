@@ -3,7 +3,7 @@ import type { QueryFilters } from '@tanstack/query-core';
 import { useQueryClient } from './useQueryClient.ripple';
 import type { Tracked } from 'ripple';
 
-export function useIsFetching(filters: Tracked<QueryFilters>, queryClient: Tracked<QueryClient>): Tracked<number> {
+export function useIsFetching(filters?: Tracked<QueryFilters>, queryClient?: Tracked<QueryClient>): Tracked<number> {
 	const client = track(() => useQueryClient(@queryClient?.()));
 	const queryCache = track(() => @client.getQueryCache());
 
