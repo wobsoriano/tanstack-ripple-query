@@ -49,7 +49,7 @@ component Todos() {
 }
 ```
 
-## Reactive 
+## Reactive
 
 Query will update automatically when you pass a tracked state
 
