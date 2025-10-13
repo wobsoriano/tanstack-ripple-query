@@ -1,6 +1,6 @@
 import { QueryClientContext } from './QueryClientProvider.ripple';
 
-export function useQueryClient(queryClient: QueryClient): QueryClient {
+export function useQueryClient(queryClient?: QueryClient): QueryClient {
 	if (queryClient) {
 		return queryClient;
 	}

@@ -1,12 +1,11 @@
-import type { Tracked } from 'ripple';
 import { effect, track, TrackedObject } from 'ripple';
-import type { CreateBaseQueryOptions, CreateBaseQueryResult } from './types';
+import type { CreateBaseQueryOptions, CreateBaseQueryResult, MaybeTracked } from './types.js';
 import { QueryClient, QueryObserver } from '@tanstack/query-core';
 import { useQueryClient } from './useQueryClient.ripple';
 import { watch, updateState } from './utils.ripple';
 import { useIsRestoring } from './useIsRestoring.ripple';
 
-export function createBaseQuery(options: Tracked<CreateBaseQueryOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>>, Observer: typeof QueryObserver, queryClient: Tracked<QueryClient>): CreateBaseQueryResult<TData, TError> {
+export function createBaseQuery(options: MaybeTracked<CreateBaseQueryOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>>, Observer: typeof QueryObserver, queryClient: Tracked<QueryClient>): CreateBaseQueryResult<TData, TError> {
 	/** Load query client */
 	const client = track(() => useQueryClient(@queryClient?.()));
 	const isRestoring = useIsRestoring();

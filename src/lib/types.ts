@@ -6,7 +6,7 @@ import type {
 	QueryObserverOptions,
 	QueryObserverResult,
 } from '@tanstack/query-core';
-import { PropsWithChildren } from 'ripple';
+import { PropsWithChildren, Tracked } from 'ripple';
 
 export type QueryClientProviderProps = PropsWithChildren<{
 	client: QueryClient;
@@ -52,3 +52,5 @@ export type DefinedCreateQueryResult<
 	TData = unknown,
 	TError = DefaultError,
 > = DefinedCreateBaseQueryResult<TData, TError>;
+
+export type MaybeTracked<T> = T | Tracked<T>

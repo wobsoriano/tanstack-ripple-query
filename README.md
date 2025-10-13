@@ -32,7 +32,7 @@ component Todos() {
     const queryClient = useQueryClient()
 
     // Queries
-    const query = useQuery({ queryKey: ['todos'], queryFn: getTodos })
+    const query = createQuery({ queryKey: ['todos'], queryFn: getTodos })
 
     <div>
         <ul>
