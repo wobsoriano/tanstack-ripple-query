@@ -1,6 +1,14 @@
 import type {
 	DefaultError,
 	DefinedQueryObserverResult,
+	MutateFunction,
+	Mutation,
+	MutationFilters,
+	MutationObserverOptions,
+	MutationObserverResult,
+	MutationState,
+	OmitKeyof,
+	Override,
 	QueryClient,
 	QueryKey,
 	QueryObserverOptions,
@@ -52,5 +60,67 @@ export type DefinedCreateQueryResult<
 	TData = unknown,
 	TError = DefaultError,
 > = DefinedCreateBaseQueryResult<TData, TError>;
+
+/** Options for createMutation */
+export type CreateMutationOptions<
+  TData = unknown,
+  TError = DefaultError,
+  TVariables = void,
+  TOnMutateResult = unknown,
+> = OmitKeyof<
+  MutationObserverOptions<TData, TError, TVariables, TOnMutateResult>,
+  '_defaulted'
+>
+
+export type CreateMutateFunction<
+  TData = unknown,
+  TError = DefaultError,
+  TVariables = void,
+  TOnMutateResult = unknown,
+> = (
+  ...args: Parameters<
+    MutateFunction<TData, TError, TVariables, TOnMutateResult>
+  >
+) => void
+
+export type CreateMutateAsyncFunction<
+  TData = unknown,
+  TError = DefaultError,
+  TVariables = void,
+  TOnMutateResult = unknown,
+> = MutateFunction<TData, TError, TVariables, TOnMutateResult>
+
+export type CreateBaseMutationResult<
+  TData = unknown,
+  TError = DefaultError,
+  TVariables = unknown,
+  TOnMutateResult = unknown,
+> = Override<
+  MutationObserverResult<TData, TError, TVariables, TOnMutateResult>,
+  { mutate: CreateMutateFunction<TData, TError, TVariables, TOnMutateResult> }
+> & {
+  mutateAsync: CreateMutateAsyncFunction<
+    TData,
+    TError,
+    TVariables,
+    TOnMutateResult
+  >
+}
+
+/** Result from createMutation */
+export type CreateMutationResult<
+  TData = unknown,
+  TError = DefaultError,
+  TVariables = unknown,
+  TOnMutateResult = unknown,
+> = CreateBaseMutationResult<TData, TError, TVariables, TOnMutateResult>
+
+/** Options for useMutationState */
+export type MutationStateOptions<TResult = MutationState> = {
+  filters?: MutationFilters
+  select?: (
+    mutation: Mutation<unknown, DefaultError, unknown, unknown>,
+  ) => TResult
+}
 
 export type MaybeTracked<T> = T | Tracked<T>;

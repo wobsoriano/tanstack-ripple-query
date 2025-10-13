@@ -1,0 +1,61 @@
+import { effect, track, TrackedObject } from 'ripple';
+import type { CreateMutationResult, CreateMutateFunction, MaybeTracked } from './types.js'
+import type { DefaultError } from '@tanstack/query-core'
+import { MutationObserver, noop } from '@tanstack/query-core'
+import { useQueryClient } from './useQueryClient.ripple'
+import { watch } from './utils.ripple'
+
+export function createMutation<
+  TData = unknown,
+  TError = DefaultError,
+  TVariables = void,
+  TContext = unknown,
+>(
+  options: MaybeTracked<CreateMutationOptions<TData, TError, TVariables, TContext>>,
+  queryClient?: MaybeTracked<QueryClient>,
+): CreateMutationResult<TData, TError, TVariables, TContext> {
+  const client = track(() => useQueryClient(@queryClient?.()));
+
+	let observer = track(
+    new MutationObserver<TData, TError, TVariables, TContext>(
+      @client,
+      @options,
+    ),
+  );
+
+  watch([client], () => {
+    @observer = new MutationObserver(@client, @options)
+  })
+
+  effect(() => {
+    @observer.setOptions(@options)
+  })
+
+  const mutate: CreateMutateFunction<
+    TData,
+    TError,
+    TVariables,
+    TContext
+  > = (variables, mutateOptions) => {
+    @observer.mutate(variables, mutateOptions).catch(noop)
+  }
+
+  let result = new TrackedObject<CreateMutationResult<TData, TError, TVariables, TContext>>(@observer.getCurrentResult())
+  watch([observer], () => {
+    @result = @observer.getCurrentResult()
+  })
+
+  effect(() => {
+    const unsubscribe = @observer.subscribe((val) => {
+      result = {
+        ...val,
+        mutate,
+        mutateAsync: result.mutate as any,
+      }
+    })
+
+    return unsubscribe
+  })
+
+  return result
+}
