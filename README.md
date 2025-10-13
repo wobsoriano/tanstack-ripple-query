@@ -11,7 +11,6 @@ npm install tanstack-ripple-query
 ```tsx
 import {
   createQuery,
-  useQueryClient,
   QueryClient,
   QueryClientProvider,
 } from 'tanstack-ripple-query'
@@ -34,13 +33,17 @@ component Todos() {
     // Queries
     const query = createQuery({ queryKey: ['todos'], queryFn: getTodos })
 
-    <div>
+    if (query.isLoading) {
+        <p>{'Loading...'}</p>
+    } else if (query.isError) {
+        <p>{`Error: ${query.error.message}`}</p>
+    } else if (query.isSuccess) {
         <ul>
             for (const todo of query.data) {
                 <li>{todo.title}</li>
             }
         </ul>
-    </div>
+    }
 }
 ```
 
