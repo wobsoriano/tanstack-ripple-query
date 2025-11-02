@@ -76,7 +76,7 @@ component Todo() {
 }
 ```
 
-## Available helpers
+## Implemented helpers
 
 - [x] `createQuery`
 - [ ] `createMutation`
